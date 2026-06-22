@@ -101,77 +101,60 @@ def Home():
     rel="stylesheet"
   />
   <body>
-    <div class="p-5 flex justify-between items-center">
-      <h1
-        onclick="home()"
-        style="text-align: center; cursor: pointer"
-        class="text-3xl font-bold tracking-tight text-gray-900"
-      >
-        Library Manager
-      </h1>
-      <div id="profile">
-        <h5
-          onclick="login() "
-          style="
-            align-self: end;
-            background-color: black;
-            padding-right: 7px;
-            padding-left: 7px;
-            cursor: pointer;
-          "
-          class="p-1 text-white"
-        >
-          Login
-        </h5>
-      </div>
-    </div>
-    <div id="alert"></div>
-
-    <div class="search mt-6 mb-6">
-      <div class="search-in-1 shadow">
-        <select name="select" id="sel" class="inpts" style="width: 30%">
-          <option class="opt" value="categ">Genre</option>
-        </select>
-
-        <input
-          id="inpts-1"
-          class="inpts"
-          style="width: 50%"
-          type="text"
-          placeholder="Enter your value"
-        />
-        <button id="btn" onclick="searchele()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            class="bi bi-search"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="flex justify-center lg:justify-left">
-      <div
-        id="body"
-        class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-      >
-        <div
-          onclick="searchele('card-1')"
-          href="#"
-          class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-        >
-          <center>No books</center>
+    <div class="app-shell">
+      <div class="top-bar">
+        <h1 onclick="home()" class="brand">Library Manager</h1>
+        <div id="profile">
+          <h5 onclick="login()" class="nav-btn">Login</h5>
         </div>
       </div>
-      <div id="open"></div>
-      
+      <div id="alert" class="alert-box"></div>
+
+      <div class="search">
+        <div class="search-in-1">
+          <select name="select" id="sel" class="inpts" style="width: 30%">
+            <option class="opt" value="categ">Genre</option>
+          </select>
+
+          <input
+            id="inpts-1"
+            class="inpts"
+            style="width: 50%"
+            type="text"
+            placeholder="Search books, authors, or genres"
+          />
+          <button id="btn" onclick="searchele()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-search"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex justify-center lg:justify-left">
+        <div
+          id="body"
+          class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <div
+            onclick="searchele('card-1')"
+            href="#"
+            class="empty-card block max-w-sm p-6"
+          >
+            <center>No books</center>
+          </div>
+        </div>
+        <div id="open"></div>
+      </div>
     </div>
 
     <script>
@@ -219,7 +202,7 @@ def Home():
           console.log(e.msg != "User not exists" )
           if (e.msg != "User not exists" || e.msg != "SMO"){
             document.getElementById("profile").innerHTML = `
-              <h5 onclick="profile()" style="align-self: end; background-color: black; padding-right: 7px; padding-left: 7px; cursor: pointer;" class="p-1 text-white">${e.msg.name.slice(0,2).toUpperCase()}</h5>
+              <h5 onclick="profile()" class="nav-btn nav-btn--profile">${e.msg.name.slice(0,2).toUpperCase()}</h5>
                 `;
             }
           });
@@ -239,23 +222,16 @@ def Home():
         let data = JSON.parse(await books.json())
         data.msg.map((e, i) => {
           document.getElementById("body").innerHTML += `
-                    <a  onclick='openbook("${e.title}")' href="#title=${
-            e.title
-          }" class="block max-w-sm p-6 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${
-                      e.title
-                    }</h5>
+                    <a onclick='openbook("${e.title}")' href="#title=${e.title}" class="book-card block max-w-sm p-6 md:p-6">
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">Book</span>
+                      <span class="text-xs text-gray-400">Read more</span>
+                    </div>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">${e.title}</h5>
                     <h5 class="mt-2 text-sm font-bold tracking-tight text-gray-500">AUTHOR</h5>
-                    <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">${
-                      e.author
-                    }</h5>
-                    <p class="font-normal text-gray-700 dark:text-gray-400">${e.content.slice(
-                      0,
-                      75
-                    )}...</p>
-
+                    <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">${e.author}</h5>
+                    <p class="font-normal text-gray-700">${e.content.slice(0, 75)}...</p>
                     </a>
-
                     `;
         });
       };
@@ -301,22 +277,15 @@ def Home():
             e.msg.map((e, i) => {
               document.getElementById("body").innerHTML = "";
               document.getElementById("body").innerHTML += `
-                          <a  onclick='openbook("${e.title}")' href="#title=${
-                e.title
-              }" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${
-                            e.title
-                          }</h5>
+                          <a onclick='openbook("${e.title}")' href="#title=${e.title}" class="book-card block max-w-sm p-6">
+                          <div class="flex items-center justify-between mb-3">
+                            <span class="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">Result</span>
+                          </div>
+                          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">${e.title}</h5>
                           <h5 class="mt-2 text-sm font-bold tracking-tight text-gray-500">AUTHOR</h5>
-                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">${
-                            e.author
-                          }</h5>
-                          <p class="font-normal text-gray-700 dark:text-gray-400">${e.content.slice(
-                            0,
-                            75
-                          )}...</p>
+                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">${e.author}</h5>
+                          <p class="font-normal text-gray-700">${e.content.slice(0, 75)}...</p>
                       </a>
-
                           `;
             });
           }
@@ -339,22 +308,15 @@ def Home():
           document.getElementById("body").innerHTML = "";
           res.msg.map((e, i) => {
             document.getElementById("body").innerHTML += `
-                          <a onclick='openbook("${e.title}")' href="#title=${
-              e.title
-            }" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${
-                            e.title
-                          }</h5>
+                          <a onclick='openbook("${e.title}")' href="#title=${e.title}" class="book-card block max-w-sm p-6">
+                          <div class="flex items-center justify-between mb-3">
+                            <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">${document.getElementById("sel").value}</span>
+                          </div>
+                          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">${e.title}</h5>
                           <h5 class="mt-2 text-sm font-bold tracking-tight text-gray-500">AUTHOR</h5>
-                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">${
-                            e.author
-                          }</h5>
-                          <p class="font-normal text-gray-700 dark:text-gray-400">${e.content.slice(
-                            0,
-                            75
-                          )}...</p>
+                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">${e.author}</h5>
+                          <p class="font-normal text-gray-700">${e.content.slice(0, 75)}...</p>
                           </a>
-
                           `;
           });
         } else {
@@ -380,12 +342,13 @@ def Home():
         document.getElementById("open").style.display = null;
         e.msg.map((e, i) => {
           document.getElementById("open").innerHTML = `
-                      <div class='p-8'>
-                          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${e.title}</h5>
+                      <div class='detail-panel p-8 max-w-4xl mx-auto'>
+                          <span class="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 mb-4">Book Details</span>
+                          <h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900">${e.title}</h5>
                           <h5 class="mt-2 text-sm font-bold tracking-tight text-gray-500">AUTHOR</h5>
-                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">${e.author}</h5>
-                          <p class="font-normal text-gray-700 dark:text-gray-400">${e.content}</p>
-                          <button onclick='getbook("${e.title}","${e.author}")' type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 mt-5">Add Book</button>
+                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">${e.author}</h5>
+                          <p class="font-normal text-gray-700 leading-7">${e.content}</p>
+                          <button onclick='getbook("${e.title}","${e.author}")' type="button" class="action-btn px-5 py-2.5 mr-2 mb-2 mt-5">Add Book</button>
                           </div>
                           `;
           return;
@@ -519,7 +482,7 @@ def Signup():
 
         <button
           onclick="submit()"
-          class="w-full mt-5 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          class="auth-btn w-full mt-5 text-white focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Sign up to your account
         </button>
@@ -659,7 +622,7 @@ def Login():
 
         <button
           onclick="submit()"
-          class="w-full mt-5 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          class="auth-btn w-full mt-5 text-white focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Login to your account
         </button>
@@ -804,47 +767,26 @@ def Profile():
     rel="stylesheet"
   />
   <body>
-    <div class="p-5 flex justify-between items-center">
-      <h1
-        onclick="home()"
-        style="text-align: center; cursor: pointer;"
-        class="text-3xl font-bold tracking-tight text-gray-900"
-      >
-        Library Manager
-      </h1>
-      <div id="profile">
-        <h5
-          style="
-            align-self: end;
-            background-color: black;
-            padding-right: 7px;
-            padding-left: 7px;
-            cursor: pointer;
-          "
-          class="p-1 text-white"
-        >
-          Login
-        </h5>
+    <div class="app-shell">
+      <div class="top-bar">
+        <h1 onclick="home()" class="brand">Library Manager</h1>
+        <div id="profile">
+          <h5 class="nav-btn">Login</h5>
+        </div>
       </div>
-    </div>
 
-    <div class="p-5">
-      <h5
-        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        Your Books
-      </h5>
-    </div>
-
-    <div class="flex justify-center">
-      <div
-        id="body"
-        class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-      >
-        
+      <div class="p-5">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Your Books</h5>
       </div>
-      <div id="nobooks"></div>
-      <div id="open"></div>
+
+      <div class="flex justify-center">
+        <div
+          id="body"
+          class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        ></div>
+        <div id="nobooks"></div>
+        <div id="open"></div>
+      </div>
     </div>
 
     <script>
@@ -880,7 +822,7 @@ def Profile():
           .then((e) => {
           e = JSON.parse(e)
             document.getElementById("profile").innerHTML = `
-        <h5 onclick="logout()" style="align-self: end; background-color: black; padding-right: 7px; padding-left: 7px; cursor: pointer;" class="p-1 text-white">Logout</h5>
+        <h5 onclick="logout()" class="nav-btn">Logout</h5>
           `;
             document.getElementById("body").style.display = null;
             document.getElementById("open").style.display = "none";
@@ -893,23 +835,15 @@ def Profile():
             let last = new Date(e.date.$date).getDate()
                 document.getElementById("nobooks").innerHTML = ""
                 document.getElementById("body").innerHTML += `
-                <a  onclick='openbook("${e.title}")' style="width:300px" href="#title=${
-                  e.title
-                }" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${
-                  e.title
-                }</h5>
+                <a onclick='openbook("${e.title}")' style="width:300px" href="#title=${e.title}" class="book-card block max-w-sm p-6">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Saved</span>
+                  <span class="text-xs font-semibold text-gray-400">${last - today - 1} days ago</span>
+                </div>
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">${e.title}</h5>
                 <h5 class="mt-2 text-sm font-bold tracking-tight text-gray-500">AUTHOR</h5>
-                <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">${
-                  e.author
-                }</h5>
-                
-                <h5 class="mb-2 text-sm font-bold tracking-tight text-white" style='background-color:green;padding:5px;text-align:end; width:fit-content'>${
-                  last-today-1
-                } Days ago</h5>
-                
+                <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">${e.author}</h5>
                 </a>
-                
                 `;
               });
             } 
@@ -954,12 +888,13 @@ def Profile():
         document.getElementById("open").style.display = null;
         e.msg.map((e, i) => {
           document.getElementById("open").innerHTML = `
-                      <div class='p-8'>
-                          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">${e.title}</h5>
+                      <div class='detail-panel p-8 max-w-4xl mx-auto'>
+                          <span class="inline-flex rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 mb-4">Saved Book</span>
+                          <h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900">${e.title}</h5>
                           <h5 class="mt-2 text-sm font-bold tracking-tight text-gray-500">AUTHOR</h5>
-                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">${e.author}</h5>
-                          <p class="font-normal text-gray-700 dark:text-gray-400">${e.content}</p>
-                          <button onclick='returnbook("${e.title}")' type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 mt-5">Remove Book</button>
+                          <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900">${e.author}</h5>
+                          <p class="font-normal text-gray-700 leading-7">${e.content}</p>
+                          <button onclick='returnbook("${e.title}")' type="button" class="action-btn action-btn--danger px-5 py-2.5 mr-2 mb-2 mt-5">Remove Book</button>
                           </div>
                           `;
          
